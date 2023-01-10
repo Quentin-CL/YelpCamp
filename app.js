@@ -1,24 +1,23 @@
 // Si on est en mode developpement alors on va chercher les info du fichier env (variable d'environnement)
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').config()
-}
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate');
-const ExpressError = require("./utils/ExpressError");
-const methodOverride = require('method-override');
-const session = require('express-session');
-const flash = require("connect-flash");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const User = require('./models/user')
+import { } from 'dotenv/config'
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import ejsMate from 'ejs-mate';
+import ExpressError from "./utils/ExpressError.js";
+import methodOverride from 'method-override';
+import session from 'express-session';
+import flash from "connect-flash";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from './models/user.js';
 
 
 
-const campgroundRoutes = require('./routes/campgrounds');
-const reviewRoutes = require('./routes/reviews');
-const userRoutes = require('./routes/users')
+import campgroundRoutes from './routes/campgrounds.js';
+import reviewRoutes from './routes/reviews.js';
+import userRoutes from './routes/users.js';
 
 
 mongoose.connect("mongodb://localhost:27017/yelp-camp");
@@ -31,6 +30,9 @@ db.once('open', () => {
 
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');

@@ -1,7 +1,8 @@
-const { ref } = require('joi');
-const mongoose = require('mongoose');
+import pkg from 'joi';
+const { ref } = pkg;
+import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
-const Review = require('./review')
+import Review from './review.js';
 
 
 const ImageSchema = new Schema({
@@ -13,9 +14,22 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200')
 })
 
+// Par defaut, la conversion des données Mongoose en JSON n'inclut pas les virtuals => Option par defaut à changer
+const opts = { toJSON: { virtuals: true } }
 const CampgroundSchema = new Schema({
     title: String,
     images: [ImageSchema],
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     price: Number,
     description: String,
     location: String,
@@ -28,7 +42,13 @@ const CampgroundSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Review'
         }
-    ]
+    ],
+
+}, opts);
+
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
+    return `<strong><a href='/campgrounds/${this._id}'>${this.title}</a></strong>
+    <p>${this.description.substring(0, 20)}...</p>`
 })
 
 CampgroundSchema.post('findOneAndDelete', async (doc) => {
@@ -40,4 +60,4 @@ CampgroundSchema.post('findOneAndDelete', async (doc) => {
         })
     }
 })
-module.exports = mongoose.model('Campground', CampgroundSchema)
+export default mongoose.model('Campground', CampgroundSchema)

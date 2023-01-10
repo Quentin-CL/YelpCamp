@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router({ mergeParams: true });
-const catchAsync = require("../utils/catchAsync");
-const passport = require('passport');
-const users = require('../controllers/users')
+import catchAsync from "../utils/catchAsync.js";
+import passport from 'passport';
+import * as users from '../controllers/users.js';
 
 
 
@@ -19,4 +19,4 @@ router.get('/logout', users.logout)
 
 
 
-module.exports = router;
+export default router;

@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const catchAsync = require("../utils/catchAsync");
-const campgrounds = require('../controllers/campgrounds')
-const { isLoggedIn, isAuthor, validateCampground } = require('../middleware')
-const multer = require('multer')
-const { storage } = require("../cloudinary/index")
-const upload = multer({ storage })
+import catchAsync from "../utils/catchAsync.js";
+import * as campgrounds from '../controllers/campgrounds.js';
+import { isLoggedIn, isAuthor, validateCampground } from '../middleware.js';
+import multer from 'multer';
+import { storage } from "../cloudinary/index.js";
+const upload = multer({ storage });
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
@@ -21,4 +21,4 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm))
 
-module.exports = router
+export default router
